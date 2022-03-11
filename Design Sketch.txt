@@ -1,1 +1,32 @@
 Design Sketch:
+
+Player Object
+- Holds Name
+- Holds Score
+- Holds Symbol? (Option for the player to select their own symbol)
+- Holds Owned Tiles (Resets after every game)
+
+- Has Constructor method.
+- Has Drop Piece method.
+
+Board Object
+- Holds Two Players
+- Holds Victory Tile Arrays
+
+- Has Create Players methods (calls player constructors for its' players)
+- Has Show Board method (clears console and writes the whole board)
+- Has Reset method
+- Has Victory Condition method
+
+Gameplay Loop:
+1) Start app.
+2) Input Player 1.
+3) Input Player 2.
+4) Draw Board.
+5) Prompt Player 1 drop.
+6) Check Victory Conditions. (will check only after player owns at least 4 pieces)
+7) Prompt Player 2 drop.
+8) Check Victory Conditions. (will check only after player owns at least 4 pieces)
+9) If victory is achieved, inform winner.
+10) Prompt game reset or exit.
+11) If reset, repeat steps 4 to 10.
