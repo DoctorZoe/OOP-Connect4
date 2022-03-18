@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "876d45c5-abaf-467e-94ae-03c5f66293a3": {
+      "ProjectGuid": "876d45c5-abaf-467e-94ae-03c5f66293a3",
+      "DisplayName": "OOP-Connect4",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

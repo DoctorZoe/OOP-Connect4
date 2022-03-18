@@ -5,3 +5,11 @@ C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP
 C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP-Connect4.csproj.CoreCompileInputs.cache
 C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP-Connect4.exe
 C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP-Connect4.pdb
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\bin\Debug\OOP-Connect4.exe.config
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\bin\Debug\OOP-Connect4.exe
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\bin\Debug\OOP-Connect4.pdb
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\obj\Debug\OOP-Connect4.csproj.AssemblyReference.cache
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\obj\Debug\OOP-Connect4.csproj.SuggestedBindingRedirects.cache
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\obj\Debug\OOP-Connect4.csproj.CoreCompileInputs.cache
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\obj\Debug\OOP-Connect4.exe
+C:\Users\yami_\Documents\Repositories\OOP-Connect4\OOP-Connect4\obj\Debug\OOP-Connect4.pdb
