@@ -31,7 +31,7 @@ namespace OOP_Connect4
                 return tileAI;
             }
         }
-        class Board
+        static class Board
         {
             static public int turnCounter = 1;
             static public char[,] board = { { '|', '#', '#', '#', '#', '#', '#', '#', '|' },
@@ -42,7 +42,7 @@ namespace OOP_Connect4
                                             { '|', '#', '#', '#', '#', '#', '#', '#', '|' },
                                             { ' ', '1', '2', '3', '4', '5', '6', '7', ' ' } };
 
-            public void Display()
+            static public void Display()
             {
                 Console.WriteLine();
                 for (int i = 0; i < board.GetLength(0); i++)
@@ -57,9 +57,7 @@ namespace OOP_Connect4
         }
         static void Main(string[] args)
         {
-            Board board = new Board();
-            board.Display();
-
+            Board.Display();
             Console.Read();
         }
     }
