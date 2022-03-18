@@ -59,8 +59,59 @@ namespace OOP_Connect4
                 }
             }
         }
+        class Initializer
+        {
+            public int NumOfUsers { get; set; } //Current number of players
+            public string Player1Name { get; set; } //Name of player 1
+            public string Player2Name { get; set; } //Name of player 2, "AI" if only one player is chosen
+
+            public void NewGame() //To be called in order to start a new game
+            {
+                Board.NewBoard();
+                Console.WriteLine("Welcome user! How many people will be playing?");
+                while (NumOfUsers != 1 && NumOfUsers != 2) //Wait for correct number of players
+                {
+                    string input = Console.ReadLine();
+                    int value = 0;
+                    if (int.TryParse(input, out value)) //Ensure text will not crash the program
+                    {
+                        if (value != 1 && value != 2)
+                        {
+                            Console.WriteLine("\nSorry! 1 or 2 players only!"); //Tell how many players are allowed
+                        }
+                    }
+                    else Console.WriteLine("\nPlease enter a number!"); //Tell only numbers
+                    NumOfUsers = value; //Assign value to number of users for the class
+                }
+                switch (NumOfUsers) //Based on number of users get names for either 1 or 2 players and set them accordingly
+                {
+                    case 1:
+                        Console.WriteLine("\n1 player, great!");
+                        Console.Write("Name: ");
+                        Player1Name = Console.ReadLine();
+                        Player2Name = "AI"; //With only 1 player, player 2 is AI
+                        break;
+                    default:
+                        Console.WriteLine("\n2 players, good luck!");
+                        Console.Write("Player 1 Name: ");
+                        Player1Name = Console.ReadLine();
+                        Console.Write("Player 2 Name: ");
+                        Player2Name = Console.ReadLine();
+                        break;
+                }
+            }
+        }
         static void Main(string[] args)
         {
+            Initializer game = new Initializer(); //Create instance of game
+            game.NewGame(); //Create new game and get player and game information
+            Player p1 = new Player { Name = game.Player1Name, Score = 0, Tile = 'x', Win = false }; //Add player information to player 1
+            Player p2 = new Player { Name = game.Player2Name, Score = 0, Tile = 'o', Win = false }; //Add player information to player 2
+            if (game.NumOfUsers == 1) //For if it is only 1 player, make an AI instance instead of player instance
+            {
+                p2 = new AI { Name = game.Player2Name, Score = 0, Tile = 'o', Win = false }; //Add AI information to player 2
+            }
+            Console.Clear();
             Board.Display();
             Console.Read();
         }
