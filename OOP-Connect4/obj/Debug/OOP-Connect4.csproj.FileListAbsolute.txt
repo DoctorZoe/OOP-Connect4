@@ -1,0 +1,7 @@
+C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\bin\Debug\OOP-Connect4.exe.config
+C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\bin\Debug\OOP-Connect4.exe
+C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\bin\Debug\OOP-Connect4.pdb
+C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP-Connect4.csproj.AssemblyReference.cache
+C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP-Connect4.csproj.CoreCompileInputs.cache
+C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP-Connect4.exe
+C:\Users\rolux\Desktop\Code\SODV1202\GITHUB Connect 4\OOP-Connect4\obj\Debug\OOP-Connect4.pdb
