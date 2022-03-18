@@ -10,12 +10,12 @@ namespace OOP_Connect4
     {
         class Player
         {
-            public string Name { get; set; }
-            public char Tile { get; set; }
-            public int Score { get; set; }
-            public bool Win { get; set; }
+            public string Name { get; set; } //Current player name
+            public char Tile { get; set; } //The current tile of the player
+            public int Score { get; set; } //How many wins the player has obtained in the session
+            public bool Win { get; set; } //If the player has won
 
-            public virtual int chooseColumn()
+            public virtual int chooseColumn() //The player enters a value of a column to place their tile and that value gets returned
             {
                 Console.Write($"\n{Name}, where would you like to place your tile? ");
                 int value = int.Parse(Console.ReadLine());
@@ -24,7 +24,7 @@ namespace OOP_Connect4
         }
         class AI : Player
         {
-            public override int chooseColumn()
+            public override int chooseColumn() //AI will pick a value at random between 1-7 to place their tile
             {
                 Random number = new Random();
                 int tileAI = number.Next() % 7 + 1;
