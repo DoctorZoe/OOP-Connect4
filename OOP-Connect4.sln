@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOP-Connect4", "OOP-Connect4\OOP-Connect4.csproj", "{876D45C5-ABAF-467E-94AE-03C5F66293A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{876D45C5-ABAF-467E-94AE-03C5F66293A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876D45C5-ABAF-467E-94AE-03C5F66293A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876D45C5-ABAF-467E-94AE-03C5F66293A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876D45C5-ABAF-467E-94AE-03C5F66293A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {16CBB61E-A16F-4851-8E56-99EA372A65E9}
+	EndGlobalSection
+EndGlobal
