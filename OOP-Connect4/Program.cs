@@ -87,6 +87,11 @@ namespace OOP_Connect4
             {
                 return shouldRun;
             }
+
+            public void StopRun()
+            {
+                shouldRun = false;
+            }
             public void NewGame() //To be called in order to start a new game
             {
                 NumOfUsers = 0; // makes sure there are no user when a game starts.
@@ -271,6 +276,7 @@ namespace OOP_Connect4
             Initializer game = new Initializer(); //Create instance of game
             while (game.WillRun())
             {
+                Console.Clear();
                 game.NewGame(); //Create new game and get player and game information
                 Player p1 = new Player { Name = game.Player1Name, Score = 0, Tile = 'x', Win = false }; //Add player information to player 1
                 Player p2 = new Player { Name = game.Player2Name, Score = 0, Tile = 'o', Win = false }; //Add player information to player 2
@@ -314,9 +320,20 @@ namespace OOP_Connect4
                     Controller.EndGameCondition(p1 ,p2);
                 }
                 
-                Console.WriteLine("Do you want to run another game? (YES/NO)");
-                Console.ReadLine();
-                Console.Clear();
+                Console.Write("\nDo you want to run another game? (Y/N) ");
+                while (game.WillRun())
+                {
+                    string input = Console.ReadLine();
+                    if (input == "Y" || input == "Yes" || input == "y") break; //breaks while doing nothing, thus restarts the game.
+                    if (input == "N" || input == "No" || input == "n") game.StopRun(); //method to stop execution of the game
+                    else
+                    {
+                        Console.Write("Invalid input, please try again. Another game? (Y/N) ");
+                    }
+                }
+                
+                
+
             }
         }
     }
