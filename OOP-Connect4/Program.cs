@@ -57,7 +57,7 @@ namespace OOP_Connect4
             static public char[,] board; //actual board being used.
             static public void NewBoard() //function for clearing the board.
             {
-                board = cleanBoard.Clone() as char[,];
+                board = cleanBoard.Clone() as char[,];//getting a clean board.
                 turnCounter = 1;
                 Controller.game = true;
             }
