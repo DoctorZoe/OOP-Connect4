@@ -57,7 +57,7 @@ namespace OOP_Connect4
             static public char[,] board; //actual board being used.
             static public void NewBoard() //function for clearing the board.
             {
-                board = cleanBoard;
+                board = cleanBoard.Clone() as char[,];
                 turnCounter = 1;
                 Controller.game = true;
             }
@@ -135,17 +135,133 @@ namespace OOP_Connect4
                     {
                         Board.board[i, column] = player.Tile; //Set current clear slot to current players tile
                         Board.turnCounter++; //Increase the turn counter so next player can go
+                        Controller.CheckWinCondition(player); //checks winning conditions for player. //CHECK PLACETILE METHOD
                         return true; //Notify that a tile was placed
                     }
                 }
                 return false; //If a tile was unable to be placed return false showing that the column is currently full
             }
-
-            static public void EndGameCondition(Player P1, Player P2) //checks for winning condition for a given player.
+            static public void RandomizePlayers(Player p1, Player p2)
             {
-                if (Board.turnCounter == 43)
+                Random prandom = new Random();
+                int goesFirst = prandom.Next() % 2 + 1;
+                Player store = new Player();
+                if (goesFirst == 1) //if result is 1, will change player order.
                 {
-                    Console.WriteLine("Game over, nobody wins.");
+                    store = p1; 
+                    p1 = p2;
+                    p2 = store;
+                }
+                Console.WriteLine(p1.Name + " goes first."); //tells which player goes first.
+            }
+
+            static public void CheckWinCondition(Player p)
+            {
+                char s = p.Tile;
+                //start of winning condition check:
+                for (int i = 5; i >= 0; i--) //horizontal check.
+                {
+                    if (p.Win == true) break;
+                    for (int j = 1; j <= 4; j++)
+                    {
+                        if (p.Win == true) break;
+                        int count = 0;
+                        if (Board.board[i, j] == s)
+                        {
+                            count++;
+                            if (Board.board[i, j + 1] == s) count++;
+                            if (Board.board[i, j + 2] == s) count++;
+                            if (Board.board[i, j + 3] == s) count++;
+                        }
+                        if (count == 4)
+                        {
+                            p.Win = true; //declares the player a winner.
+                        }
+                    }
+                }
+
+                for (int i = 5; i >= 3; i--) //vertical check.
+                {
+                    if (p.Win == true) break;
+                    for (int j = 1; j <= 7; j++)
+                    {
+                        if (p.Win == true) break;
+                        int count = 0;
+                        if (Board.board[i, j] == s)
+                        {
+                            count++;
+                            if (Board.board[i-1, j] == s) count++;
+                            if (Board.board[i-2, j] == s) count++;
+                            if (Board.board[i-3, j] == s) count++;
+                        }
+                        if (count == 4)
+                        {
+                            p.Win = true; //declares the player a winner.
+                        }
+                    }
+                }
+
+                for (int i = 5; i >= 3; i--) //ascending diagonal check.
+                {
+                    if (p.Win == true) break;
+                    for (int j = 1; j <= 4; j++)
+                    {
+                        if (p.Win == true) break;
+                        int count = 0;
+                        if (Board.board[i, j] == s)
+                        {
+                            count++;
+                            if (Board.board[i - 1, j + 1] == s) count++;
+                            if (Board.board[i - 2, j + 2] == s) count++;
+                            if (Board.board[i - 3, j + 3] == s) count++;
+                        }
+                        if (count == 4)
+                        {
+                            p.Win = true; //declares the player a winner.
+                        }
+                    }
+                }
+
+                for (int i = 0; i <= 2; i++) //descending diagonal check.
+                {
+                    if (p.Win == true) break;
+                    for (int j = 1; j <= 4; j++)
+                    {
+                        if (p.Win == true) break;
+                        int count = 0;
+                        if (Board.board[i, j] == s)
+                        {
+                            count++;
+                            if (Board.board[i + 1, j + 1] == s) count++;
+                            if (Board.board[i + 2, j + 2] == s) count++;
+                            if (Board.board[i + 3, j + 3] == s) count++;
+                        }
+                        if (count == 4)
+                        {
+                            p.Win = true; //declares the player a winner.
+                        }
+                    }
+                }
+
+
+            }
+            static public void EndGameCondition(Player p1, Player p2) //checks for winning condition for a given player.
+            {
+                if (p1.Win && Controller.game == true)
+                {
+                    Console.WriteLine($"Game over, {p1.Name} wins.");
+                    Controller.game = false;
+                }
+
+                if (p2.Win && Controller.game == true)
+                {
+                    Console.WriteLine($"Game over, {p2.Name} wins.");
+                    Controller.game = false;
+                }
+
+                if (Board.turnCounter == 43 && Controller.game == true)
+                {
+                    Console.WriteLine("Game over, board is full. Nobody wins.");
                     Controller.game = false;
                 }
             }
@@ -162,17 +278,17 @@ namespace OOP_Connect4
                 {
                     p2 = new AI { Name = "AI", Score = 0, Tile = 'o', Win = false }; //Add AI information to player 2
                 }
-                while (!p1.Win && !p2.Win && Controller.game) //Check if a player has won, if not continue the game (also checks if the game is running)
+                while (Controller.game) //Check if a player has won, if not continue the game (also checks if the game is running)
                 {
                     Console.Clear(); //Clear the console to keep it clean and crisp and not full of information and needing to scroll
                     Board.Display(); //Display the board in its current state
-                    Controller.EndGameCondition(p1, p2);
+                    Controller.RandomizePlayers(p1, p2);//calls randomizer.
 
                     if (Board.turnCounter % 2 == 1 && Controller.game == true) //Allow player 1 to go (if game is running)
                     {
                         int placement = p1.chooseColumn(); //Ask for the column they would like to place
                         if (!Controller.PlaceTile(placement, p1)) //If it cannot be placed notify the user, then refresh
-                        {   
+                        {
                             if (p1.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
                             {
                                 Console.WriteLine("Sorry this column is full! Try again!");
@@ -195,8 +311,9 @@ namespace OOP_Connect4
                             }
                         }
                     }
-                    
+                    Controller.EndGameCondition(p1 ,p2);
                 }
+                
                 Console.WriteLine("Do you want to run another game? (YES/NO)");
                 Console.ReadLine();
                 Console.Clear();
