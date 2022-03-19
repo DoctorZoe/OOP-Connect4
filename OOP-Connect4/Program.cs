@@ -14,6 +14,7 @@ namespace OOP_Connect4
             public string Name { get; set; } //Current player name
             public char Tile { get; set; } //The current tile of the player
             public bool Win { get; set; } //If the player has won
+            public int Score { get; set; } //Current score for the player
 
             public virtual int chooseColumn() //The player enters a value of a column to place their tile and that value gets returned
             {
@@ -62,8 +63,8 @@ namespace OOP_Connect4
             }
             static public void Display() //function for displaying the board.
             {
-                Console.WriteLine();
                 Console.WriteLine("Turns: " + turnCounter); //debug line
+                Console.WriteLine();
                 for (int i = 0; i < board.GetLength(0); i++)
                 {
                     for (int j = 0; j < board.GetLength(1); j++)
@@ -95,7 +96,7 @@ namespace OOP_Connect4
             {
                 NumOfUsers = 0; // makes sure there are no user when a game starts.
                 Board.NewBoard();
-                Console.WriteLine("Welcome user! How many people will be playing?");
+                Console.Write("Welcome user! How many people will be playing?\nPlayers [1/2]: ");
                 while (NumOfUsers != 1 && NumOfUsers != 2) //Wait for correct number of players
                 {
                     string input = Console.ReadLine();
@@ -114,13 +115,13 @@ namespace OOP_Connect4
                 {
                     case 1:
                         Console.WriteLine("\n1 player, great!");
-                        Console.Write("Name: ");
+                        Console.Write("\nName: ");
                         Player1Name = Console.ReadLine();
                         Player2Name = "AI"; //With only 1 player, player 2 is AI
                         break;
                     default:
                         Console.WriteLine("\n2 players, good luck!");
-                        Console.Write("Player 1 Name: ");
+                        Console.Write("\nPlayer 1 Name: ");
                         Player1Name = Console.ReadLine();
                         Console.Write("Player 2 Name: ");
                         Player2Name = Console.ReadLine();
@@ -145,14 +146,14 @@ namespace OOP_Connect4
                 }
                 return false; //If a tile was unable to be placed return false showing that the column is currently full
             }
-            static public void RandomizePlayers(Player p1, Player p2)
+            static public void RandomizePlayers(ref Player p1, ref Player p2) //Passing by reference to ensure values change outside of the function
             {
                 Random prandom = new Random();
                 int goesFirst = prandom.Next() % 2 + 1;
                 Player store = new Player();
                 if (goesFirst == 1) //if result is 1, will change player order.
                 {
-                    store = p1; 
+                    store = p1;
                     p1 = p2;
                     p2 = store;
                 }
@@ -194,9 +195,9 @@ namespace OOP_Connect4
                         if (Board.board[i, j] == s)
                         {
                             count++;
-                            if (Board.board[i-1, j] == s) count++;
-                            if (Board.board[i-2, j] == s) count++;
-                            if (Board.board[i-3, j] == s) count++;
+                            if (Board.board[i - 1, j] == s) count++;
+                            if (Board.board[i - 2, j] == s) count++;
+                            if (Board.board[i - 3, j] == s) count++;
                         }
                         if (count == 4)
                         {
@@ -249,25 +250,31 @@ namespace OOP_Connect4
 
 
             }
-            static public void EndGameCondition(Player p1, Player p2) //checks for winning condition for a given player.
-            {
+            static public bool EndGameCondition(Player p1, Player p2) //Checks for winning condition for a given player and add to their score
+            {                                                         //Also returns true if won or end of game and false if game is still ongoing
                 if (p1.Win && Controller.game == true)
                 {
                     Console.WriteLine($"Game over, {p1.Name} wins.");
                     Controller.game = false;
+                    p1.Score++; //Add to players score
+                    return true;
                 }
 
                 if (p2.Win && Controller.game == true)
                 {
                     Console.WriteLine($"Game over, {p2.Name} wins.");
                     Controller.game = false;
+                    p2.Score++; //Add to players score
+                    return true;
                 }
 
                 if (Board.turnCounter == 43 && Controller.game == true)
                 {
                     Console.WriteLine("Game over, board is full. Nobody wins.");
                     Controller.game = false;
+                    return true;
                 }
+                return false;
             }
         }
         static void Main(string[] args)
@@ -287,7 +294,33 @@ namespace OOP_Connect4
                 {
                     Console.Clear(); //Clear the console to keep it clean and crisp and not full of information and needing to scroll
                     Board.Display(); //Display the board in its current state
-                    Controller.RandomizePlayers(p1, p2);//calls randomizer.
+                    if (Controller.EndGameCondition(p1, p2))
+                    {
+                        Console.WriteLine($"\nCurrent Score:\n{p1.Name}: {p1.Score} and {p2.Name}: {p2.Score}"); //Display current number of wins
+                        Console.Write("\nDo you want to run another game? [Y/N] ");
+                        while (game.WillRun())
+                        {
+                            string input = Console.ReadLine().ToLower(); //Using ToLower to ensure no matter how they input yes/no/y/n it will work
+                            if (input == "yes" || input == "y")
+                            {
+                                p1.Win = false;
+                                p2.Win = false;
+                                Board.NewBoard(); //breaks while doing nothing, thus restarts the game.
+                                Console.Clear(); //Clears for the next game
+                                Board.Display(); //Displays new board for next game
+                                break;
+                            }
+                            if (input == "no" || input == "n") game.StopRun(); //method to stop execution of the game
+                            else
+                            {
+                                Console.Write("Invalid input, please try again. Another game? (Y/N) ");
+                            }
+                        }
+                    }
+                    if (Board.turnCounter == 1) //This is to make sure that randomizing only happens on turn 1
+                    {
+                        Controller.RandomizePlayers(ref p1, ref p2); //Calls randomizer and passes values by reference to switch player order
+                    }
 
                     if (Board.turnCounter % 2 == 1 && Controller.game == true) //Allow player 1 to go (if game is running)
                     {
@@ -312,27 +345,10 @@ namespace OOP_Connect4
                                     Console.WriteLine("Sorry this column is full! Try again!");
                                     Thread.Sleep(400);
                                 }
-
                             }
                         }
                     }
-                    Controller.EndGameCondition(p1 ,p2);
                 }
-                
-                Console.Write("\nDo you want to run another game? (Y/N) ");
-                while (game.WillRun())
-                {
-                    string input = Console.ReadLine();
-                    if (input == "Y" || input == "Yes" || input == "y") break; //breaks while doing nothing, thus restarts the game.
-                    if (input == "N" || input == "No" || input == "n") game.StopRun(); //method to stop execution of the game
-                    else
-                    {
-                        Console.Write("Invalid input, please try again. Another game? (Y/N) ");
-                    }
-                }
-                
-                
-
             }
         }
     }
