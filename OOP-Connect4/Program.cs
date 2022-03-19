@@ -13,7 +13,6 @@ namespace OOP_Connect4
         {
             public string Name { get; set; } //Current player name
             public char Tile { get; set; } //The current tile of the player
-            public int Score { get; set; } //How many wins the player has obtained in the session
             public bool Win { get; set; } //If the player has won
 
             public virtual int chooseColumn() //The player enters a value of a column to place their tile and that value gets returned
@@ -278,11 +277,11 @@ namespace OOP_Connect4
             {
                 Console.Clear();
                 game.NewGame(); //Create new game and get player and game information
-                Player p1 = new Player { Name = game.Player1Name, Score = 0, Tile = 'x', Win = false }; //Add player information to player 1
-                Player p2 = new Player { Name = game.Player2Name, Score = 0, Tile = 'o', Win = false }; //Add player information to player 2
+                Player p1 = new Player { Name = game.Player1Name, Tile = 'x', Win = false }; //Add player information to player 1
+                Player p2 = new Player { Name = game.Player2Name, Tile = 'o', Win = false }; //Add player information to player 2
                 if (game.NumOfUsers == 1) //For if it is only 1 player, make an AI instance instead of player instance
                 {
-                    p2 = new AI { Name = "AI", Score = 0, Tile = 'o', Win = false }; //Add AI information to player 2
+                    p2 = new AI { Name = "AI", Tile = 'o', Win = false }; //Add AI information to player 2
                 }
                 while (Controller.game) //Check if a player has won, if not continue the game (also checks if the game is running)
                 {
