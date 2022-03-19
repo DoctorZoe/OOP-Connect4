@@ -58,10 +58,13 @@ namespace OOP_Connect4
             static public void NewBoard() //function for clearing the board.
             {
                 board = cleanBoard;
+                turnCounter = 1;
+                Controller.game = true;
             }
             static public void Display() //function for displaying the board.
             {
                 Console.WriteLine();
+                Console.WriteLine("Turns: " + turnCounter); //debug line
                 for (int i = 0; i < board.GetLength(0); i++)
                 {
                     for (int j = 0; j < board.GetLength(1); j++)
@@ -78,8 +81,15 @@ namespace OOP_Connect4
             public string Player1Name { get; set; } //Name of player 1
             public string Player2Name { get; set; } //Name of player 2, "AI" if only one player is chosen
 
+            bool shouldRun = true; //variable to check if game is running.
+
+            public bool WillRun()
+            {
+                return shouldRun;
+            }
             public void NewGame() //To be called in order to start a new game
             {
+                NumOfUsers = 0; // makes sure there are no user when a game starts.
                 Board.NewBoard();
                 Console.WriteLine("Welcome user! How many people will be playing?");
                 while (NumOfUsers != 1 && NumOfUsers != 2) //Wait for correct number of players
@@ -116,6 +126,7 @@ namespace OOP_Connect4
         }
         static class Controller
         {
+            public static bool game = true;
             static public bool PlaceTile(int column, Player player) //Places the tile in the first available slot based on players choice, if available
             {                                                       //If not available will return false so player knows to pick a different column
                 for (int i = 5; i >= 0; i--)//Starts at the bottom of the board and goes to the top
@@ -129,41 +140,66 @@ namespace OOP_Connect4
                 }
                 return false; //If a tile was unable to be placed return false showing that the column is currently full
             }
+
+            static public void EndGameCondition(Player P1, Player P2) //checks for winning condition for a given player.
+            {
+                if (Board.turnCounter == 43)
+                {
+                    Console.WriteLine("Game over, nobody wins.");
+                    Controller.game = false;
+                }
+            }
         }
         static void Main(string[] args)
         {
             Initializer game = new Initializer(); //Create instance of game
-            game.NewGame(); //Create new game and get player and game information
-            Player p1 = new Player { Name = game.Player1Name, Score = 0, Tile = 'x', Win = false }; //Add player information to player 1
-            Player p2 = new Player { Name = game.Player2Name, Score = 0, Tile = 'o', Win = false }; //Add player information to player 2
-            if (game.NumOfUsers == 1) //For if it is only 1 player, make an AI instance instead of player instance
+            while (game.WillRun())
             {
-                p2 = new AI { Name = game.Player2Name, Score = 0, Tile = 'o', Win = false }; //Add AI information to player 2
-            }
-            while (!p1.Win && !p2.Win) //Check if a player has won, if not continue the game
-            {
-                Console.Clear(); //Clear the console to keep it clean and crisp and not full of information and needing to scroll
-                Board.Display(); //Display the board in its current state
-                if (Board.turnCounter % 2 == 1) //Allow player 1 to go
+                game.NewGame(); //Create new game and get player and game information
+                Player p1 = new Player { Name = game.Player1Name, Score = 0, Tile = 'x', Win = false }; //Add player information to player 1
+                Player p2 = new Player { Name = game.Player2Name, Score = 0, Tile = 'o', Win = false }; //Add player information to player 2
+                if (game.NumOfUsers == 1) //For if it is only 1 player, make an AI instance instead of player instance
                 {
-                    int placement = p1.chooseColumn(); //Ask for the column they would like to place
-                    if (!Controller.PlaceTile(placement, p1)) //If it cannot be placed notify the user, then refresh
-                    {
-                        Console.WriteLine("Sorry this column is full! Try again!");
-                        Thread.Sleep(1500);
-                    }
+                    p2 = new AI { Name = "AI", Score = 0, Tile = 'o', Win = false }; //Add AI information to player 2
                 }
-                else if (Board.turnCounter % 2 == 0) //Allow player 2 to go
+                while (!p1.Win && !p2.Win && Controller.game) //Check if a player has won, if not continue the game (also checks if the game is running)
                 {
-                    int placement = p2.chooseColumn(); //Ask for the column they would like to place
-                    if (!Controller.PlaceTile(placement, p2)) //If it cannot be placed notify the user, then refresh
+                    Console.Clear(); //Clear the console to keep it clean and crisp and not full of information and needing to scroll
+                    Board.Display(); //Display the board in its current state
+                    Controller.EndGameCondition(p1, p2);
+
+                    if (Board.turnCounter % 2 == 1 && Controller.game == true) //Allow player 1 to go (if game is running)
                     {
-                        {
-                            Console.WriteLine("Sorry this column is full! Try again!");
-                            Thread.Sleep(1500);
+                        int placement = p1.chooseColumn(); //Ask for the column they would like to place
+                        if (!Controller.PlaceTile(placement, p1)) //If it cannot be placed notify the user, then refresh
+                        {   
+                            if (p1.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
+                            {
+                                Console.WriteLine("Sorry this column is full! Try again!");
+                                Thread.Sleep(400);
+                            }
                         }
                     }
+                    else if (Board.turnCounter % 2 == 0 && Controller.game == true) //Allow player 2 to go (if game is running)
+                    {
+                        int placement = p2.chooseColumn(); //Ask for the column they would like to place
+                        if (!Controller.PlaceTile(placement, p2)) //If it cannot be placed notify the user, then refresh
+                        {
+                            {
+                                if (p2.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
+                                {
+                                    Console.WriteLine("Sorry this column is full! Try again!");
+                                    Thread.Sleep(400);
+                                }
+
+                            }
+                        }
+                    }
+                    
                 }
+                Console.WriteLine("Do you want to run another game? (YES/NO)");
+                Console.ReadLine();
+                Console.Clear();
             }
         }
     }
