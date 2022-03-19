@@ -63,7 +63,7 @@ namespace OOP_Connect4
             }
             static public void Display() //function for displaying the board.
             {
-                Console.WriteLine("Turns: " + turnCounter); //debug line
+                Console.WriteLine("Turn: " + turnCounter); //debug line
                 Console.WriteLine();
                 for (int i = 0; i < board.GetLength(0); i++)
                 {
