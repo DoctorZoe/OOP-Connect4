@@ -9,14 +9,22 @@ namespace OOP_Connect4
 {
     internal class Program
     {
-        class Player
+        public interface IPlayer
         {
-            public string Name { get; set; } //Current player name
-            public char Tile { get; set; } //The current tile of the player
-            public bool Win { get; set; } //If the player has won
-            public int Score { get; set; } //Current score for the player
+            string Name { get; set; } //Current player name
+            char Tile { get; set; } //The current tile of the player
+            bool Win { get; set; } //If the player has won
+            int Score { get; set; } //Current score for the player
+            int ChooseColumn();
+        }
+        class Human : IPlayer
+        {
+            public string Name { get; set; } //Current human player name
+            public char Tile { get; set; } //The current tile of the human player
+            public bool Win { get; set; } //If the human player has won
+            public int Score { get; set; } //Current score for the human player
 
-            public virtual int chooseColumn() //The player enters a value of a column to place their tile and that value gets returned
+            public int ChooseColumn() //The player enters a value of a column to place their tile and that value gets returned
             {
                 Console.Write($"\n{Name}, where would you like to place your tile? ");
                 int value = 0;
@@ -35,9 +43,13 @@ namespace OOP_Connect4
                 return value;
             }
         }
-        class AI : Player
+        class AI : IPlayer
         {
-            public override int chooseColumn() //AI will pick a value at random between 1-7 to place their tile
+            public string Name { get; set; } //Will be set to AI by default
+            public char Tile { get; set; } //The current tile of the AI (default o)
+            public bool Win { get; set; } //If the AI has won
+            public int Score { get; set; } //Current score for the AI
+            public int ChooseColumn() //AI will pick a value at random between 1-7 to place their tile
             {
                 Random number = new Random();
                 int tileAI = number.Next() % 7 + 1;
@@ -132,7 +144,7 @@ namespace OOP_Connect4
         static class Controller
         {
             public static bool game = true;
-            static public bool PlaceTile(int column, Player player) //Places the tile in the first available slot based on players choice, if available
+            static public bool PlaceTile(int column, IPlayer player) //Places the tile in the first available slot based on players choice, if available
             {                                                       //If not available will return false so player knows to pick a different column
                 for (int i = 5; i >= 0; i--)//Starts at the bottom of the board and goes to the top
                 {
@@ -146,11 +158,11 @@ namespace OOP_Connect4
                 }
                 return false; //If a tile was unable to be placed return false showing that the column is currently full
             }
-            static public void RandomizePlayers(ref Player p1, ref Player p2) //Passing by reference to ensure values change outside of the function
+            static public void RandomizePlayers(ref IPlayer p1, ref IPlayer p2) //Passing by reference to ensure values change outside of the function
             {
                 Random prandom = new Random();
                 int goesFirst = prandom.Next() % 2 + 1;
-                Player store = new Player();
+                IPlayer store;
                 if (goesFirst == 1) //if result is 1, will change player order.
                 {
                     store = p1;
@@ -160,7 +172,7 @@ namespace OOP_Connect4
                 Console.WriteLine(p1.Name + " goes first."); //tells which player goes first.
             }
 
-            static public void CheckWinCondition(Player p)
+            static public void CheckWinCondition(IPlayer p)
             {
                 char s = p.Tile;
                 //start of winning condition check:
@@ -250,7 +262,7 @@ namespace OOP_Connect4
 
 
             }
-            static public bool EndGameCondition(Player p1, Player p2) //Checks for winning condition for a given player and add to their score
+            static public bool EndGameCondition(IPlayer p1, IPlayer p2) //Checks for winning condition for a given player and add to their score
             {                                                         //Also returns true if won or end of game and false if game is still ongoing
                 if (p1.Win && Controller.game == true)
                 {
@@ -284,8 +296,8 @@ namespace OOP_Connect4
             {
                 Console.Clear();
                 game.NewGame(); //Create new game and get player and game information
-                Player p1 = new Player { Name = game.Player1Name, Tile = 'x', Win = false }; //Add player information to player 1
-                Player p2 = new Player { Name = game.Player2Name, Tile = 'o', Win = false }; //Add player information to player 2
+                IPlayer p1 = new Human { Name = game.Player1Name, Tile = 'x', Win = false }; //Add player information to player 1
+                IPlayer p2 = new Human { Name = game.Player2Name, Tile = 'o', Win = false }; //Add player information to player 2
                 if (game.NumOfUsers == 1) //For if it is only 1 player, make an AI instance instead of player instance
                 {
                     p2 = new AI { Name = "AI", Tile = 'o', Win = false }; //Add AI information to player 2
@@ -324,7 +336,7 @@ namespace OOP_Connect4
 
                     if (Board.turnCounter % 2 == 1 && Controller.game == true) //Allow player 1 to go (if game is running)
                     {
-                        int placement = p1.chooseColumn(); //Ask for the column they would like to place
+                        int placement = p1.ChooseColumn(); //Ask for the column they would like to place
                         if (!Controller.PlaceTile(placement, p1)) //If it cannot be placed notify the user, then refresh
                         {
                             if (p1.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
@@ -336,7 +348,7 @@ namespace OOP_Connect4
                     }
                     else if (Board.turnCounter % 2 == 0 && Controller.game == true) //Allow player 2 to go (if game is running)
                     {
-                        int placement = p2.chooseColumn(); //Ask for the column they would like to place
+                        int placement = p2.ChooseColumn(); //Ask for the column they would like to place
                         if (!Controller.PlaceTile(placement, p2)) //If it cannot be placed notify the user, then refresh
                         {
                             {
