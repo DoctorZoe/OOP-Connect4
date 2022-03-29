@@ -126,17 +126,26 @@ namespace OOP_Connect4
                 switch (NumOfUsers) //Based on number of users get names for either 1 or 2 players and set them accordingly
                 {
                     case 1:
-                        Console.WriteLine("\n1 player, great!");
-                        Console.Write("\nName: ");
-                        Player1Name = Console.ReadLine();
+                        Console.WriteLine("\n1 player, great!\n");
+                        do //Ensure players enter something
+                        {
+                            Console.Write("Name: ");
+                            Player1Name = Console.ReadLine();
+                        } while (Player1Name.Trim()=="");
                         Player2Name = "AI"; //With only 1 player, player 2 is AI
                         break;
                     default:
-                        Console.WriteLine("\n2 players, good luck!");
-                        Console.Write("\nPlayer 1 Name: ");
-                        Player1Name = Console.ReadLine();
-                        Console.Write("Player 2 Name: ");
-                        Player2Name = Console.ReadLine();
+                        Console.WriteLine("\n2 players, good luck!\n");
+                        do //Ensure players enter something
+                        {
+                            Console.Write("Player 1 Name: ");
+                            Player1Name = Console.ReadLine();
+                        } while (Player1Name.Trim() == "");
+                        do //Ensure players enter something
+                        {
+                            Console.Write("Player 2 Name: ");
+                            Player2Name = Console.ReadLine();
+                        } while (Player2Name.Trim()=="");
                         break;
                 }
             }
