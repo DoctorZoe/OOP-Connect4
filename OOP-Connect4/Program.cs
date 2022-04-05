@@ -300,71 +300,95 @@ namespace OOP_Connect4
         }
         static void Main(string[] args)
         {
-            Initializer game = new Initializer(); //Create instance of game
-            while (game.WillRun())
+            bool running = true; //If we want the program to be running
+            while (running) //See if the user wants to play a game or exit the application
             {
                 Console.Clear();
-                game.NewGame(); //Create new game and get player and game information
-                IPlayer p1 = new Human { Name = game.Player1Name, Tile = 'x', Win = false }; //Add player information to player 1
-                IPlayer p2 = new Human { Name = game.Player2Name, Tile = 'o', Win = false }; //Add player information to player 2
-                if (game.NumOfUsers == 1) //For if it is only 1 player, make an AI instance instead of player instance
+                Console.Write("Play a game? [Y/N] ");
+                while (running)
                 {
-                    p2 = new AI { Name = "AI", Tile = 'o', Win = false }; //Add AI information to player 2
+                    string play = Console.ReadLine().ToLower();
+                    if (play == "n" || play == "no") //If they type n or no exit the application
+                    {
+                        running = false;
+                        return;
+                    }
+                    else if (play == "y" || play == "yes") //Continue on with the application
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Invalid input, please try again.\nPlay a game? (Y/N) ");
+                    }
                 }
-                while (Controller.game) //Check if a player has won, if not continue the game (also checks if the game is running)
+                Initializer game = new Initializer(); //Create instance of game
+                while (game.WillRun())
                 {
-                    Console.Clear(); //Clear the console to keep it clean and crisp and not full of information and needing to scroll
-                    Board.Display(); //Display the board in its current state
-                    if (Controller.EndGameCondition(p1, p2))
+                    Console.Clear();
+                    game.NewGame(); //Create new game and get player and game information
+                    IPlayer p1 = new Human { Name = game.Player1Name, Tile = 'x', Win = false }; //Add player information to player 1
+                    IPlayer p2 = new Human { Name = game.Player2Name, Tile = 'o', Win = false }; //Add player information to player 2
+                    if (game.NumOfUsers == 1) //For if it is only 1 player, make an AI instance instead of player instance
                     {
-                        Console.WriteLine($"\nCurrent Score:\n{p1.Name}: {p1.Score} and {p2.Name}: {p2.Score}"); //Display current number of wins
-                        Console.Write("\nDo you want to run another game? [Y/N] ");
-                        while (game.WillRun())
+                        p2 = new AI { Name = "AI", Tile = 'o', Win = false }; //Add AI information to player 2
+                    }
+                    while (Controller.game) //Check if a player has won, if not continue the game (also checks if the game is running)
+                    {
+                        Console.Clear(); //Clear the console to keep it clean and crisp and not full of information and needing to scroll
+                        Board.Display(); //Display the board in its current state
+                        if (Controller.EndGameCondition(p1, p2))
                         {
-                            string input = Console.ReadLine().ToLower(); //Using ToLower to ensure no matter how they input yes/no/y/n it will work
-                            if (input == "yes" || input == "y")
+                            Console.WriteLine($"\nCurrent Score:\n{p1.Name}: {p1.Score} and {p2.Name}: {p2.Score}"); //Display current number of wins
+                            Console.Write("\nPlay again? [Y/N] ");
+                            while (game.WillRun())
                             {
-                                p1.Win = false;
-                                p2.Win = false;
-                                Board.NewBoard(); //breaks while doing nothing, thus restarts the game.
-                                Console.Clear(); //Clears for the next game
-                                Board.Display(); //Displays new board for next game
-                                break;
-                            }
-                            if (input == "no" || input == "n") game.StopRun(); //method to stop execution of the game
-                            else
-                            {
-                                Console.Write("Invalid input, please try again. Another game? (Y/N) ");
+                                string input = Console.ReadLine().ToLower(); //Using ToLower to ensure no matter how they input yes/no/y/n it will work
+                                if (input == "yes" || input == "y")
+                                {
+                                    p1.Win = false;
+                                    p2.Win = false;
+                                    Board.NewBoard(); //breaks while doing nothing, thus restarts the game.
+                                    Console.Clear(); //Clears for the next game
+                                    Board.Display(); //Displays new board for next game
+                                    break;
+                                }
+                                if (input == "no" || input == "n") game.StopRun(); //method to stop execution of the game
+                                else
+                                {
+                                    Console.Write("Invalid input, please try again.\nPlay again? (Y/N) ");
+                                }
                             }
                         }
-                    }
-                    if (Board.turnCounter == 1) //This is to make sure that randomizing only happens on turn 1
-                    {
-                        Controller.RandomizePlayers(ref p1, ref p2); //Calls randomizer and passes values by reference to switch player order
-                    }
+                        if (Board.turnCounter == 1) //This is to make sure that randomizing only happens on turn 1
+                        {
+                            Controller.RandomizePlayers(ref p1, ref p2); //Calls randomizer and passes values by reference to switch player order
+                        }
 
-                    if (Board.turnCounter % 2 == 1 && Controller.game == true) //Allow player 1 to go (if game is running)
-                    {
-                        int placement = p1.ChooseColumn(); //Ask for the column they would like to place
-                        if (!Controller.PlaceTile(placement, p1)) //If it cannot be placed notify the user, then refresh
+                        if (Board.turnCounter % 2 == 1 && Controller.game == true) //Allow player 1 to go (if game is running)
                         {
-                            if (p1.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
+                            int placement = p1.ChooseColumn(); //Ask for the column they would like to place
+                            if (!Controller.PlaceTile(placement, p1)) //If it cannot be placed notify the user, then refresh
                             {
-                                Console.WriteLine("Sorry this column is full! Try again!");
-                                Thread.Sleep(400);
-                            }
-                        }
-                    }
-                    else if (Board.turnCounter % 2 == 0 && Controller.game == true) //Allow player 2 to go (if game is running)
-                    {
-                        int placement = p2.ChooseColumn(); //Ask for the column they would like to place
-                        if (!Controller.PlaceTile(placement, p2)) //If it cannot be placed notify the user, then refresh
-                        {
-                            {
-                                if (p2.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
+                                if (p1.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
                                 {
                                     Console.WriteLine("Sorry this column is full! Try again!");
                                     Thread.Sleep(400);
+                                }
+                            }
+                        }
+                        else if (Board.turnCounter % 2 == 0 && Controller.game == true) //Allow player 2 to go (if game is running)
+                        {
+                            int placement = p2.ChooseColumn(); //Ask for the column they would like to place
+                            if (!Controller.PlaceTile(placement, p2)) //If it cannot be placed notify the user, then refresh
+                            {
+                                {
+                                    if (p2.Name != "AI")//added this if to make sure dumb AI won't flood the chat with message below.
+                                    {
+                                        Console.WriteLine("Sorry this column is full! Try again!");
+                                        Thread.Sleep(400);
+                                    }
                                 }
                             }
                         }
