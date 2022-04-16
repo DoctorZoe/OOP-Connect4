@@ -26,17 +26,24 @@ namespace OOP_Connect4
 
             public int ChooseColumn() //The player enters a value of a column to place their tile and that value gets returned
             {
-                Console.Write($"\n{Name}, where would you like to place your tile? ");
                 int value = 0;
                 while (value > 7 || value < 1) //Only allow values between 1 and 7
                 {
                     string input = Console.ReadLine(); //Get column from user input
                     if (int.TryParse(input, out value)) //Ensure text will not crash the program, and we always get a integer value
                     {
-                        if (value > 7 || value < 1) //Give error message if value outside of the appropriate range
+                        try
+                        {
+                            if (value > 7 || value < 1) //Give error message if value outside of the appropriate range
+                            {
+                                throw new Error();
+                            }
+                        }
+                        catch (Error e)
                         {
                             Console.WriteLine("\nPlease enter a value from 1 to 7.");
                         }
+
                     }
                     else Console.WriteLine("\nPlease enter a number!"); //Give error message to give integer values
                 }
