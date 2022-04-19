@@ -34,6 +34,7 @@ namespace OOP_Connect4
 
                 if (int.TryParse(input, out value)) //Ensure text will not crash the program, and we always get a integer value
                 {
+                    Console.Write($"\n{Name}, where would you like to place your tile? ");
                     try
                     {
                         if (value > 7 || value < 1) //Give error message if value outside of the appropriate range
