@@ -30,11 +30,11 @@ namespace OOP_Connect4
 
             while (value > 7 || value < 1) //Only allow values between 1 and 7
             {
+                Console.Write($"\n{Name}, where would you like to place your tile? ");
                 string input = Console.ReadLine(); //Get column from user input
 
                 if (int.TryParse(input, out value)) //Ensure text will not crash the program, and we always get a integer value
                 {
-                    Console.Write($"\n{Name}, where would you like to place your tile? ");
                     try
                     {
                         if (value > 7 || value < 1) //Give error message if value outside of the appropriate range
